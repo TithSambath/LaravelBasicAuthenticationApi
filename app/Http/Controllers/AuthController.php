@@ -22,10 +22,13 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $token = $user->createToken($request->device_name)->plainTextToken;
+
         return response()->json([
+            'status' => '201',
             'message' => 'User created successfully',
-            'user' => $user,
-        ], 201);
+            'data' => ['token' => $token],
+        ], 200);
     }
 
     function signIn(Request $request)
@@ -47,8 +50,9 @@ class AuthController extends Controller
         }
         $token = $user->createToken($request->device_name)->plainTextToken;
         return response()->json([
+            'status' => '200',
             'message' => 'User logged in successfully',
-            'token' => $token,
+            'data' => ['token' => $token],
         ], 200);
     }
 }
